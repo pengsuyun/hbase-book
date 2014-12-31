@@ -3,6 +3,5 @@
 target/
 .idea/
 /bin/
-.project
 .classpath
 .settings
