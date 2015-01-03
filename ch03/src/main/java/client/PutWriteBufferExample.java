@@ -24,7 +24,7 @@ public class PutWriteBufferExample {
     HTable table = new HTable(conf, "testtable");
     System.out.println("Auto flush: " + table.isAutoFlush());  // co PutWriteBufferExample-1-CheckFlush Check what the auto flush flag is set to, should print "Auto flush: true".
 
-    table.setAutoFlush(false); // co PutWriteBufferExample-2-SetFlush Set the auto flush to false to enable the client-side write buffer.
+    table.setAutoFlushTo(false); // co PutWriteBufferExample-2-SetFlush Set the auto flush to false to enable the client-side write buffer.
 
     Put put1 = new Put(Bytes.toBytes("row1"));
     put1.add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"),

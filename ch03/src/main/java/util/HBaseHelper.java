@@ -46,8 +46,10 @@ public class HBaseHelper {
   public void createTable(String table, byte[][] splitKeys, String... colfams)
   throws IOException {
     HTableDescriptor desc = new HTableDescriptor(table);
+    
     for (String cf : colfams) {
       HColumnDescriptor coldef = new HColumnDescriptor(cf);
+      coldef.setMaxVersions(3);
       desc.addFamily(coldef);
     }
     if (splitKeys != null) {

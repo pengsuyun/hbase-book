@@ -5,7 +5,9 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.Row;
 import org.apache.hadoop.hbase.util.Bytes;
+
 import util.HBaseHelper;
 
 import java.io.IOException;
@@ -18,10 +20,10 @@ public class PutListErrorExample1 {
     Configuration conf = HBaseConfiguration.create();
     HBaseHelper helper = HBaseHelper.getHelper(conf);
     helper.dropTable("testtable");
-    helper.createTable("testtable", "colfam1");
-    HTable table = new HTable(conf, "testtable");
-
-    List<Put> puts = new ArrayList<Put>();
+		helper.createTable("testtable", "colfam1");
+		HTable table = new HTable(conf, "testtable");
+		table.setAutoFlush(true, true);
+		List<Put> puts = new ArrayList<Put>();
 
     // vv PutListErrorExample1
     Put put1 = new Put(Bytes.toBytes("row1"));
@@ -37,7 +39,15 @@ public class PutListErrorExample1 {
       Bytes.toBytes("val3"));
     puts.add(put3);
 
-    table.put(puts); // co PutListErrorExample1-2-DoPut Store multiple rows with columns into HBase.
+    try{
+    	table.put(puts); // co PutListErrorExample1-2-DoPut Store multiple rows with columns into HBase.
     // ^^ PutListErrorExample1
+    }catch(Exception e){
+    	e.printStackTrace();
+    	List<Row> list = table.getWriteBuffer();
+        System.err.println(list);
+    }
+    
+    
   }
 }

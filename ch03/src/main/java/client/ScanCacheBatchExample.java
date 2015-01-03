@@ -28,7 +28,10 @@ public class ScanCacheBatchExample {
       @Override
       protected void append(LoggingEvent event) {
         String msg = event.getMessage().toString();
-        if (msg != null && msg.contains("Call: next")) {
+        
+        //System.err.println(msg);
+        
+        if (msg != null && msg.contains("method_name: \"Scan\"")) {
           counters[0]++;
         }
       }
@@ -46,14 +49,17 @@ public class ScanCacheBatchExample {
 
 
     Scan scan = new Scan();
-    scan.setCaching(caching);  // co ScanCacheBatchExample-1-Set Set caching and batch parameters.
+    //scan.setCaching(caching);  // co ScanCacheBatchExample-1-Set Set caching and batch parameters.
     scan.setBatch(batch);
+    
     ResultScanner scanner = table.getScanner(scan);
+    
     for (Result result : scanner) {
       counters[1]++; // co ScanCacheBatchExample-2-Count Count the number of Results available.
+      //System.err.println(result);
     }
     scanner.close();
-    System.out.println("Caching: " + caching + ", Batch: " + batch +
+    System.out.println("Caching: " + scan.getCaching() + ", Batch: " + scan.getBatch() +
       ", Results: " + counters[1] + ", RPCs: " + counters[0]);
   }
 
@@ -61,22 +67,29 @@ public class ScanCacheBatchExample {
     // ^^ ScanCacheBatchExample
     Configuration conf = HBaseConfiguration.create();
 
-    HBaseHelper helper = HBaseHelper.getHelper(conf);
+   /* HBaseHelper helper = HBaseHelper.getHelper(conf);
     helper.dropTable("testtable");
     helper.createTable("testtable", "colfam1", "colfam2");
-    helper.fillTable("testtable", 1, 10, 10, "colfam1", "colfam2");
+    helper.fillTable("testtable", 1, 10, 10, "colfam1", "colfam2");*/
 
     table = new HTable(conf, "testtable");
-
+    
     // vv ScanCacheBatchExample
     scan(1, 1);
-    scan(200, 1);
-    scan(2000, 100); // co ScanCacheBatchExample-3-Test Test various combinations.
-    scan(2, 100);
+    scan(1, 2);
+    scan(1, 3);
+    scan(1, 4);
+    scan(1, 5);
+    scan(1, 8);
+    scan(1, 10);
+    scan(1, 20);
+   // scan(200, 1);
+ //   scan(2000, 1); // co ScanCacheBatchExample-3-Test Test various combinations.
+    /*scan(2, 100);
     scan(2, 10);
     scan(5, 100);
     scan(5, 20);
-    scan(10, 10);
+    scan(10, 10);*/
   }
   // ^^ ScanCacheBatchExample
 }

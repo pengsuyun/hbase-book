@@ -5,7 +5,9 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.Row;
 import org.apache.hadoop.hbase.util.Bytes;
+
 import util.HBaseHelper;
 
 import java.io.IOException;
@@ -20,7 +22,7 @@ public class PutListErrorExample2 {
     helper.dropTable("testtable");
     helper.createTable("testtable", "colfam1");
     HTable table = new HTable(conf, "testtable");
-
+    table.setAutoFlushTo(false);
     List<Put> puts = new ArrayList<Put>();
 
     // vv PutListErrorExample2
@@ -42,8 +44,10 @@ public class PutListErrorExample2 {
     /*[*/try {/*]*/
       table.put(puts);
     /*[*/} catch (Exception e) {
+    	List<Row> list = table.getWriteBuffer();
+        System.err.println(list);
       System.err.println("Error: " + e);
-      table.flushCommits();/*]*/ // co PutListErrorExample2-2-Catch Catch local exception and commit queued updates.
+      //table.flushCommits();/*]*/ // co PutListErrorExample2-2-Catch Catch local exception and commit queued updates.
     /*[*/}/*]*/
     // ^^ PutListErrorExample2
   }

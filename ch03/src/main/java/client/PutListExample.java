@@ -20,7 +20,7 @@ public class PutListExample {
     helper.dropTable("testtable");
     helper.createTable("testtable", "colfam1");
     HTable table = new HTable(conf, "testtable");
-
+    table.getTableDescriptor().getFamily(Bytes.toBytes("colfam1")).setMaxVersions(3);
     // vv PutListExample
     List<Put> puts = new ArrayList<Put>(); // co PutListExample-1-CreateList Create a list that holds the Put instances.
 
