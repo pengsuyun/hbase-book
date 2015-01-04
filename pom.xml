@@ -14,10 +14,11 @@
 		<developerConnection>scm:git:git@github.com:larsgeorge/hbase-book.git</developerConnection> 
 		<url>http://github.com/larsgeorge/hbase-book</url> </scm> -->
 	<properties>
-		<jdkLevel>1.6</jdkLevel>
+		<jdkLevel>1.7</jdkLevel>
 		<requiredMavenVersion>[2.1,)</requiredMavenVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.build.outputEncoding>UTF-8</project.build.outputEncoding>
+		<java.home>D:\devTools\Java\jdk1.7.0_67</java.home>
 	</properties>
 
 	<build>
@@ -168,6 +169,7 @@
 			<artifactId>commons-configuration</artifactId>
 			<version>1.6</version>
 		</dependency>
+		
 	</dependencies>
 
 	<modules>

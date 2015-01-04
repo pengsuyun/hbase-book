@@ -21,7 +21,19 @@ public class RegionObserverExample extends BaseRegionObserver {
   // vv RegionObserverExample
   public static final byte[] FIXED_ROW = Bytes.toBytes("@@@GETTIME@@@");
 
+  
+  
   @Override
+public void preOpen(ObserverContext<RegionCoprocessorEnvironment> e)
+		throws IOException {
+	LOG.debug("RegionObserverExample***************************preOpen");
+	
+	LOG.debug("e.getEnvironment():"+e.getEnvironment());
+}
+
+
+
+@Override
   public void preGet(final ObserverContext<RegionCoprocessorEnvironment> e,
       final Get get, final List<KeyValue> results) throws IOException {
     // ^^ RegionObserverExample
@@ -35,6 +47,8 @@ public class RegionObserverExample extends BaseRegionObserver {
       // vv RegionObserverExample
       results.add(kv); // co RegionObserverExample-2-Create Create a special KeyValue instance containing just the current time on the server.
     }
+    
+    LOG.debug("continue ....................................... ");
   }
 }
 // ^^ RegionObserverExample

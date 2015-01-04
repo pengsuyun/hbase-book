@@ -36,16 +36,16 @@ public class EndpointForMethodExample {
       e.printStackTrace();
     }
     HTable table = new HTable(conf, "testtable");
-    while (table.getRegionsInfo().size() < 2)
+    while (table.getRegionLocations().size() < 2)
       try {
         Thread.sleep(1000);
       } catch (InterruptedException e) {
       }
     try {
-      //vv EndpointForMethodExample
-      /*[*/
+      /*//vv EndpointForMethodExample
+      [
       Batch.Call call = Batch.forMethod(RowCountProtocol.class,
-        "getKeyValueCount");/*]*/
+        "getKeyValueCount");]
       Map<byte[], Long> results = table.coprocessorExec(
         RowCountProtocol.class, null, null, call);
       // ^^ EndpointForMethodExample
@@ -56,7 +56,7 @@ public class EndpointForMethodExample {
         System.out.println("Region: " + Bytes.toString(entry.getKey()) +
           ", Count: " + entry.getValue());
       }
-      System.out.println("Total Count: " + total);
+      System.out.println("Total Count: " + total);*/
     } catch (Throwable throwable) {
       throwable.printStackTrace();
     }

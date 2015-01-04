@@ -1,6 +1,8 @@
 package filters;
 
 // cc SingleColumnValueFilterExample Example using a filter to return only rows with a given value in a given column
+import java.io.IOException;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.KeyValue;
@@ -10,14 +12,13 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.filter.CompareFilter;
-import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
+import org.apache.hadoop.hbase.filter.SingleColumnValueExcludeFilter;
 import org.apache.hadoop.hbase.filter.SubstringComparator;
 import org.apache.hadoop.hbase.util.Bytes;
+
 import util.HBaseHelper;
 
-import java.io.IOException;
-
-public class SingleColumnValueFilterExample {
+public class SingleColumnValueExcludeFilterExample {
 
   public static void main(String[] args) throws IOException {
     Configuration conf = HBaseConfiguration.create();
@@ -31,15 +32,14 @@ public class SingleColumnValueFilterExample {
     HTable table = new HTable(conf, "testtable");
 
     // vv SingleColumnValueFilterExample
-    SingleColumnValueFilter filter = new SingleColumnValueFilter(
+    SingleColumnValueExcludeFilter filter = new SingleColumnValueExcludeFilter(
       Bytes.toBytes("colfam1"),
       Bytes.toBytes("col-5"),
       CompareFilter.CompareOp.NOT_EQUAL,
       new SubstringComparator("val-5"));
-    filter.setFilterIfMissing(false);
+    filter.setFilterIfMissing(true);
 
     Scan scan = new Scan();
-    scan.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("col-1"));
     scan.setFilter(filter);
     ResultScanner scanner = table.getScanner(scan);
     // ^^ SingleColumnValueFilterExample

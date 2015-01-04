@@ -38,23 +38,24 @@ public class EndpointCombinedExample {
     }
     HTable table = new HTable(conf, "testtable");
     // wait for the split to be done
-    while (table.getRegionsInfo().size() < 2)
+    while (table.getRegionLocations().size() < 2)
       try {
         Thread.sleep(1000);
       } catch (InterruptedException e) {
       }
     try {
-      //vv EndpointCombinedExample
+    	Map<byte[], Pair<Long, Long>> results = null;
+      /*//vv EndpointCombinedExample
       Map<byte[], Pair<Long, Long>> results = table.coprocessorExec(
         RowCountProtocol.class,
         null, null,
-        /*[*/new Batch.Call<RowCountProtocol, Pair<Long, Long>>() {
+        [new Batch.Call<RowCountProtocol, Pair<Long, Long>>() {
           public Pair<Long, Long> call(RowCountProtocol counter)
             throws IOException {
             return new Pair(counter.getRowCount(),
-              counter.getKeyValueCount());/*]*/
+              counter.getKeyValueCount());]
           }
-        });
+        });*/
 
       long totalRows = 0;
       long totalKeyValues = 0;

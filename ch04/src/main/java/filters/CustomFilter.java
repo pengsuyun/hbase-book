@@ -1,13 +1,9 @@
 package filters;
 
 // cc CustomFilter Implements a filter that lets certain rows pass
-import org.apache.hadoop.hbase.KeyValue;
+import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.filter.FilterBase;
 import org.apache.hadoop.hbase.util.Bytes;
-
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
 
 /**
  * Implements a custom filter for HBase. It takes a value and compares
@@ -34,8 +30,8 @@ public class CustomFilter extends FilterBase{
   }
 
   @Override
-  public ReturnCode filterKeyValue(KeyValue kv) {
-    if (Bytes.compareTo(value, kv.getValue()) == 0) {
+  public ReturnCode filterKeyValue(Cell kv) {
+    if (Bytes.compareTo(value, kv.getValueArray()) == 0) {
       filterRow = false; // co CustomFilter-3-Filter When there is a matching value, then let the row pass.
     }
     return ReturnCode.INCLUDE; // co CustomFilter-4-Include Always include, since the final decision is made later.
@@ -44,16 +40,6 @@ public class CustomFilter extends FilterBase{
   @Override
   public boolean filterRow() {
     return filterRow; // co CustomFilter-5-FilterRow Here the actual decision is taking place, based on the flag status.
-  }
-
-  @Override
-  public void write(DataOutput dataOutput) throws IOException {
-    Bytes.writeByteArray(dataOutput, this.value); // co CustomFilter-6-Write Writes the given value out so it can be send to the servers.
-  }
-
-  @Override
-  public void readFields(DataInput dataInput) throws IOException {
-    this.value = Bytes.readByteArray(dataInput); // co CustomFilter-7-Read Used by the servers to establish the filter instance with the correct values.
   }
 }
 // ^^ CustomFilter

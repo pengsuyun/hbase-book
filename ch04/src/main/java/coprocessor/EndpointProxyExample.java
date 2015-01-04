@@ -36,7 +36,7 @@ public class EndpointProxyExample {
     }
     HTable table = new HTable(conf, "testtable");
     // wait for the split to be done
-    while (table.getRegionsInfo().size() < 2)
+    /*while (table.getRegionsInfo().size() < 2)
       try {
         Thread.sleep(1000);
       } catch (InterruptedException e) {
@@ -50,6 +50,6 @@ public class EndpointProxyExample {
       // ^^ EndpointProxyExample
     } catch (Throwable throwable) {
       throwable.printStackTrace();
-    }
+    }*/
   }
 }

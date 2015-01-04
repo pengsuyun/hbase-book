@@ -10,12 +10,13 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.filter.BinaryPrefixComparator;
+import org.apache.hadoop.hbase.filter.ByteArrayComparable;
 import org.apache.hadoop.hbase.filter.CompareFilter;
 import org.apache.hadoop.hbase.filter.DependentColumnFilter;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.RegexStringComparator;
-import org.apache.hadoop.hbase.filter.WritableByteArrayComparable;
 import org.apache.hadoop.hbase.util.Bytes;
+
 import util.HBaseHelper;
 
 import java.io.IOException;
@@ -27,7 +28,7 @@ public class DependentColumnFilterExample {
   // vv DependentColumnFilterExample
   private static void filter(boolean drop,
       CompareFilter.CompareOp operator,
-      WritableByteArrayComparable comparator)
+      ByteArrayComparable comparator)
   throws IOException {
     Filter filter;
     if (comparator != null) {
@@ -83,14 +84,10 @@ public class DependentColumnFilterExample {
     // vv DependentColumnFilterExample
     filter(true, CompareFilter.CompareOp.NO_OP, null);
     filter(false, CompareFilter.CompareOp.NO_OP, null); // co DependentColumnFilterExample-2-Filter Call filter method with various options.
-    filter(true, CompareFilter.CompareOp.EQUAL,
-      new BinaryPrefixComparator(Bytes.toBytes("val-5")));
-    filter(false, CompareFilter.CompareOp.EQUAL,
-      new BinaryPrefixComparator(Bytes.toBytes("val-5")));
-    filter(true, CompareFilter.CompareOp.EQUAL,
-      new RegexStringComparator(".*\\.5"));
-    filter(false, CompareFilter.CompareOp.EQUAL,
-      new RegexStringComparator(".*\\.5"));
+    /*filter(true, CompareFilter.CompareOp.EQUAL,new BinaryPrefixComparator(Bytes.toBytes("val-5")));
+    filter(false, CompareFilter.CompareOp.EQUAL,new BinaryPrefixComparator(Bytes.toBytes("val-5")));
+    filter(true, CompareFilter.CompareOp.EQUAL,new RegexStringComparator(".*\\.5"));
+    filter(false, CompareFilter.CompareOp.EQUAL,new RegexStringComparator(".*\\.5"));*/
   }
   // ^^ DependentColumnFilterExample
 }

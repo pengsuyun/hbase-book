@@ -4,4 +4,7 @@ target/
 .idea/
 /bin/
 .classpath
-.settings
+.settings/
+.project
+.gitignore
+hush/.settings/org.eclipse.jdt.core.prefs
