@@ -5,8 +5,11 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
+import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
+import org.apache.hadoop.hbase.io.compress.Compression;
 import org.apache.hadoop.hbase.util.Bytes;
+
 import util.HBaseHelper;
 
 import java.io.IOException;
@@ -24,10 +27,11 @@ public class CreateTableExample {
     HBaseAdmin admin = new HBaseAdmin(conf); // co CreateTableExample-1-CreateAdmin Create a administrative API instance.
 
     HTableDescriptor desc = new HTableDescriptor( // co CreateTableExample-2-CreateHTD Create the table descriptor instance.
-      Bytes.toBytes("testtable"));
+    		TableName.valueOf("testtable"));
 
     HColumnDescriptor coldef = new HColumnDescriptor( // co CreateTableExample-3-CreateHCD Create a column family descriptor and add it to the table descriptor.
       Bytes.toBytes("colfam1"));
+    coldef.setCompactionCompressionType(Compression.Algorithm.GZ);
     desc.addFamily(coldef);
 
     admin.createTable(desc); // co CreateTableExample-4-CreateTable Call the createTable() method to do the actual work.

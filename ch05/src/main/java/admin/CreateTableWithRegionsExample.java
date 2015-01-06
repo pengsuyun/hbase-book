@@ -5,10 +5,14 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
+import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.hbase.util.Pair;
+
 import util.HBaseHelper;
 
 import java.io.IOException;
@@ -18,7 +22,8 @@ public class CreateTableWithRegionsExample {
   // vv CreateTableWithRegionsExample
   private static void printTableRegions(String tableName) throws IOException { // co CreateTableWithRegionsExample-1-PrintTable Helper method to print the regions of a table.
     System.out.println("Printing regions of table: " + tableName);
-    HTable table = new HTable(Bytes.toBytes(tableName));
+    HConnection connection = HConnectionManager.createConnection(HBaseConfiguration.create());
+    HTable table = (HTable)connection.getTable(Bytes.toBytes(tableName));
     Pair<byte[][], byte[][]> pair = table.getStartEndKeys(); // co CreateTableWithRegionsExample-2-GetKeys Retrieve the start and end keys from the newly created table.
     for (int n = 0; n < pair.getFirst().length; n++) {
       byte[] sk = pair.getFirst()[n];
@@ -45,12 +50,12 @@ public class CreateTableWithRegionsExample {
     HBaseAdmin admin = new HBaseAdmin(conf);
 
     HTableDescriptor desc = new HTableDescriptor(
-      Bytes.toBytes("testtable1"));
+      TableName.valueOf("testtable1"));
     HColumnDescriptor coldef = new HColumnDescriptor(
       Bytes.toBytes("colfam1"));
     desc.addFamily(coldef);
 
-    admin.createTable(desc/*[*/, Bytes.toBytes(1L), Bytes.toBytes(100L), 10/*]*/); // co CreateTableWithRegionsExample-4-CreateTable1 Call the createTable() method while also specifying the region boundaries.
+    admin.createTable(desc/*[*/, Bytes.toBytes(1L), Bytes.toBytes(100L), 5/*]*/); // co CreateTableWithRegionsExample-4-CreateTable1 Call the createTable() method while also specifying the region boundaries.
     printTableRegions("testtable1");
 
     byte[][] regions = new byte[][] { // co CreateTableWithRegionsExample-5-Regions Manually create region split keys.
@@ -61,7 +66,7 @@ public class CreateTableWithRegionsExample {
       Bytes.toBytes("O"),
       Bytes.toBytes("T")
     };
-    desc.setName(Bytes.toBytes("testtable2"));
+    desc.setName(TableName.valueOf(Bytes.toBytes("testtable2")));
     admin.createTable(desc, regions); // co CreateTableWithRegionsExample-6-CreateTable2 Call the crateTable() method again, with a new table name and the list of region split keys.
     printTableRegions("testtable2");
   }

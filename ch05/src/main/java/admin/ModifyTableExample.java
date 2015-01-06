@@ -5,8 +5,10 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
+import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.util.Bytes;
+
 import util.HBaseHelper;
 
 import java.io.IOException;
@@ -21,7 +23,7 @@ public class ModifyTableExample {
     // vv ModifyTableExample
     byte[] name = Bytes.toBytes("testtable");
     HBaseAdmin admin = new HBaseAdmin(conf);
-    HTableDescriptor desc = new HTableDescriptor(name);
+    HTableDescriptor desc = new HTableDescriptor(TableName.valueOf(name));
     HColumnDescriptor coldef1 = new HColumnDescriptor(
       Bytes.toBytes("colfam1"));
     desc.addFamily(coldef1);

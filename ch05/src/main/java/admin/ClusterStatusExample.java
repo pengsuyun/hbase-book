@@ -6,17 +6,21 @@ import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.util.Bytes;
 
+import com.google.protobuf.ServiceException;
+
 import java.io.IOException;
 import java.util.Map;
 
 public class ClusterStatusExample {
 
-  public static void main(String[] args) throws IOException, InterruptedException {
+  public static void main(String[] args) throws IOException, InterruptedException, ServiceException {
     Configuration conf = HBaseConfiguration.create();
 
     // vv ClusterStatusExample
     HBaseAdmin admin = new HBaseAdmin(conf);
 
+    admin.checkHBaseAvailable(conf);
+    
     ClusterStatus status = admin.getClusterStatus(); // co ClusterStatusExample-1-GetStatus Get the cluster status.
 
     System.out.println("Cluster Status:\n--------------");
@@ -41,12 +45,12 @@ public class ClusterStatusExample {
       System.out.println("RPC Port: " + server.getPort());
       System.out.println("Start Code: " + server.getStartcode());
 
-      HServerLoad load = status.getLoad(server); // co ClusterStatusExample-3-ServerLoad Retrieve the load details for the current server.
+      ServerLoad load = status.getLoad(server); // co ClusterStatusExample-3-ServerLoad Retrieve the load details for the current server.
 
       System.out.println("\nServer Load:\n--------------");
       System.out.println("Load: " + load.getLoad());
       System.out.println("Max Heap (MB): " + load.getMaxHeapMB());
-      System.out.println("Memstore Size (MB): " + load.getMemStoreSizeInMB());
+      System.out.println("Memstore Size (MB): " + load.getMemstoreSizeInMB());
       System.out.println("No. Regions: " + load.getNumberOfRegions());
       System.out.println("No. Requests: " + load.getNumberOfRequests());
       System.out.println("Storefile Index Size (MB): " +
@@ -56,11 +60,11 @@ public class ClusterStatusExample {
       System.out.println("Used Heap (MB): " + load.getUsedHeapMB());
 
       System.out.println("\nRegion Load:\n--------------");
-      for (Map.Entry<byte[], HServerLoad.RegionLoad> entry : // co ClusterStatusExample-4-Regions Iterate over the region details of the current server.
+      for (Map.Entry<byte[], RegionLoad> entry : // co ClusterStatusExample-4-Regions Iterate over the region details of the current server.
         load.getRegionsLoad().entrySet()) {
         System.out.println("Region: " + Bytes.toStringBinary(entry.getKey()));
 
-        HServerLoad.RegionLoad regionLoad = entry.getValue(); // co ClusterStatusExample-5-RegionLoad Get the load details for the current region.
+        RegionLoad regionLoad = entry.getValue(); // co ClusterStatusExample-5-RegionLoad Get the load details for the current region.
 
         System.out.println("Name: " + Bytes.toStringBinary(
           regionLoad.getName()));

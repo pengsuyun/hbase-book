@@ -48,5 +48,7 @@ public class ListTablesExample {
     // vv ListTablesExample
     System.out.println(htd2);
     // ^^ ListTablesExample
+    
+    admin.close();
   }
 }
